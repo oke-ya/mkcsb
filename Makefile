@@ -88,7 +88,7 @@ OBJC_SRC_DIR = cocos2d-x/cocos/audio/mac \
 SINGLE_DEPTH_DIR = cocos2d-x/cocos \
                    cocos2d-x/cocos/platform
 
-CPPSRCS = serialize.cpp \
+CPPSRCS = $(TARGET).cpp \
         $(shell find $(SRC_DIR) -name '*.cpp' | grep -v android | grep -v flatc.cpp) \
         $(shell find $(SINGLE_DEPTH_DIR) -name '*.cpp' -maxdepth 1)
 
