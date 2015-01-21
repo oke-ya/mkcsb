@@ -1,30 +1,30 @@
-TARGET = serializer
+TARGET = mkcsb
 CXX = clang++
 CC = clang
 
-LDLIB_DIR = -I../../../zeron/cocos2d/cocos \
-						-I../../../zeron/cocos2d/cocos/2d \
-						-I../../../zeron/cocos2d/cocos/editor-support \
-						-I../../../zeron/cocos2d/external/glfw3/include/mac \
-						-I../../../zeron/cocos2d/extensions \
-						-I../../../zeron/cocos2d/external \
-            -I../../../zeron/cocos2d/external/xxhash \
-						-I../../../zeron/cocos2d/external/tinyxml2 \
-						-I../../../zeron/cocos2d/cocos/platform \
-						-I../../../zeron/cocos2d/external/freetype2/include/mac \
-						-I../../../zeron/cocos2d/external/edtaa3func \
-						-I../../../zeron/cocos2d/external/ConvertUTF \
-						-I../../../zeron/cocos2d/external/unzip \
-						-I../../../zeron/cocos2d/external/lua/tolua \
-						-I../../../zeron/cocos2d/external/lua/lua \
-            -I../../../zeron/cocos2d/external/png/include/mac/ \
-            -I../../../zeron/cocos2d/external/tiff/include/mac \
-            -I../../../zeron/cocos2d/external/jpeg/include/mac \
-            -I../../../zeron/cocos2d/external/webp/include/mac \
-            -I../../../zeron/cocos2d/external/chipmunk/include/chipmunk \
-						-I../../../zeron/cocos2d/cocos/scripting/lua-bindings/manual/ \
-						-I../../../zeron/cocos2d/cocos/audio/include \
-						-I../../../zeron/cocos2d/cocos/audio/mac
+LDLIB_DIR = -Icocos2d-x/cocos \
+						-Icocos2d-x/cocos/2d \
+						-Icocos2d-x/cocos/editor-support \
+						-Icocos2d-x/external/glfw3/include/mac \
+						-Icocos2d-x/extensions \
+						-Icocos2d-x/external \
+            -Icocos2d-x/external/xxhash \
+						-Icocos2d-x/external/tinyxml2 \
+						-Icocos2d-x/cocos/platform \
+						-Icocos2d-x/external/freetype2/include/mac \
+						-Icocos2d-x/external/edtaa3func \
+						-Icocos2d-x/external/ConvertUTF \
+						-Icocos2d-x/external/unzip \
+						-Icocos2d-x/external/lua/tolua \
+						-Icocos2d-x/external/lua/lua \
+            -Icocos2d-x/external/png/include/mac/ \
+            -Icocos2d-x/external/tiff/include/mac \
+            -Icocos2d-x/external/jpeg/include/mac \
+            -Icocos2d-x/external/webp/include/mac \
+            -Icocos2d-x/external/chipmunk/include/chipmunk \
+						-Icocos2d-x/cocos/scripting/lua-bindings/manual/ \
+						-Icocos2d-x/cocos/audio/include \
+						-Icocos2d-x/cocos/audio/mac
 
 CXXFLAGS = -g -std=c++11 
 
@@ -37,56 +37,56 @@ MACROS =  -DUSE_FILE32API \
 DYLIBS = /usr/lib/libz.dylib \
          /usr/lib/libobjc.dylib \
          /usr/lib/libc++abi.dylib \
-         $(shell find /Users/yalab/project/oke-ya/zeron/cocos2d/external -name "*.a" | grep mac)
+         $(shell find cocos2d-x/external -name "*.a" | grep mac)
 
 LDFLAGS = -framework OpenGL -framework CoreData -framework AudioToolbox -framework AVFoundation -framework Foundation -framework Cocoa -framework GLKit -framework OpenAL
 
 OBJDIR   = ./obj
-SRC_DIR =	/Users/yalab/project/oke-ya/zeron/cocos2d/external/Box2D \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/chipmunk \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/ConvertUTF \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/curl \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/edtaa3func \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/flatbuffers \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/freetype2 \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/glfw3 \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/jpeg \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/json \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/linux-specific \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/png \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/protobuf-lite \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/sqlite3 \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/tiff \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/tinyxml2 \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/unzip \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/webp \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/websockets/include/mac \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/xxhash \
-					/Users/yalab/project/oke-ya/zeron/cocos2d/external/xxtea \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/external/lua/tolua \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/editor-support/spine \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/editor-support/cocostudio \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/base \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/2d \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/3d \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/deprecated \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/math \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/physics \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/platform/mac \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/ui \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/renderer \
-          /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/audio/mac
+SRC_DIR =	cocos2d-x/external/Box2D \
+					cocos2d-x/external/chipmunk \
+					cocos2d-x/external/ConvertUTF \
+					cocos2d-x/external/curl \
+					cocos2d-x/external/edtaa3func \
+					cocos2d-x/external/flatbuffers \
+					cocos2d-x/external/freetype2 \
+					cocos2d-x/external/glfw3 \
+					cocos2d-x/external/jpeg \
+					cocos2d-x/external/json \
+					cocos2d-x/external/linux-specific \
+					cocos2d-x/external/png \
+					cocos2d-x/external/protobuf-lite \
+					cocos2d-x/external/sqlite3 \
+					cocos2d-x/external/tiff \
+					cocos2d-x/external/tinyxml2 \
+					cocos2d-x/external/unzip \
+					cocos2d-x/external/webp \
+					cocos2d-x/external/websockets/include/mac \
+					cocos2d-x/external/xxhash \
+					cocos2d-x/external/xxtea \
+          cocos2d-x/external/lua/tolua \
+          cocos2d-x/cocos/editor-support/spine \
+          cocos2d-x/cocos/editor-support/cocostudio \
+          cocos2d-x/cocos/base \
+          cocos2d-x/cocos/2d \
+          cocos2d-x/cocos/3d \
+          cocos2d-x/cocos/deprecated \
+          cocos2d-x/cocos/math \
+          cocos2d-x/cocos/physics \
+          cocos2d-x/cocos/platform/mac \
+          cocos2d-x/cocos/ui \
+          cocos2d-x/cocos/renderer \
+          cocos2d-x/cocos/audio/mac
 
-OBJC_SRC_DIR = /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/audio/mac \
-               /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/platform/apple \
-               /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/platform/mac/ \
-               /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/base/ \
-               /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/ui/UIEditBox/
+OBJC_SRC_DIR = cocos2d-x/cocos/audio/mac \
+               cocos2d-x/cocos/platform/apple \
+               cocos2d-x/cocos/platform/mac/ \
+               cocos2d-x/cocos/base/ \
+               cocos2d-x/cocos/ui/UIEditBox/
 
 
 
-SINGLE_DEPTH_DIR = /Users/yalab/project/oke-ya/zeron/cocos2d/cocos \
-                   /Users/yalab/project/oke-ya/zeron/cocos2d/cocos/platform
+SINGLE_DEPTH_DIR = cocos2d-x/cocos \
+                   cocos2d-x/cocos/platform
 
 CPPSRCS = serialize.cpp \
         $(shell find $(SRC_DIR) -name '*.cpp' | grep -v android | grep -v flatc.cpp) \
