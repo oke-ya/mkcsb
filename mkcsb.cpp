@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <fstream>
 
 using namespace std;
 
@@ -39,19 +40,30 @@ bool mkpath( std::string path )
 
 cocostudio::FlatBuffersSerialize fbs;
 
-void serialize(const std::string root, const std::string input)
+void copy(const std::string& root, const std::string& input, const std::string& dest)
 {
-  char buf[255];
-  getcwd(buf,255);
-  std::string curdir(buf);
-  std::string output = curdir + "/output" + input.substr(root.size());
+  std::string output = dest + input.substr(root.size());
+  printf("Copy: %s \n", output.c_str());
+  std::string dirname =  output.substr(0, output.find_last_of('/'));
+  mkpath(dirname);
+
+  ifstream inputStream(input, ios::binary);
+  ofstream outputStream(output, ios::binary);
+  outputStream << inputStream.rdbuf();
+  inputStream.close();
+  outputStream.close();
+}
+
+void serialize(const std::string& root, const std::string& input, const std::string& dest)
+{
+  std::string output = dest + input.substr(root.size());
   printf("Process: %s \n", output.c_str());
   std::string dirname =  output.substr(0, output.find_last_of('/'));
   mkpath(dirname);
   fbs.serializeFlatBuffersWithXMLFile(input, output);
 }
 
-void processDir(const std::string root, const std::string& dirname)
+void processDir(const std::string root, const std::string& dirname, const std::string& dest)
 {
   DIR *dir;
   struct dirent *ent;
@@ -72,13 +84,17 @@ void processDir(const std::string root, const std::string& dirname)
       buf << dirname;
       buf << "/";
       buf << fname;
-      processDir(root, buf.str().c_str());
+      processDir(root, buf.str().c_str(), dest);
       continue;
     }
     case DT_REG: {
       string extname = fname.substr(fname.find_last_of('.'));
+      const string& src = dirname + "/" +fname;
       if(extname == ".csd"){
-        serialize(root, dirname + "/" +fname);
+        serialize(root, src , dest);
+      }else{
+        printf("%s", src.c_str());
+        copy(root, src, dest);
       }
       continue;
     }
@@ -97,5 +113,6 @@ int main(int argc, char *argv[])
   }
   
   auto root = argv[1];
-  processDir(root, root);
+  auto dest = argv[2];
+  processDir(root, root, dest);
 }
