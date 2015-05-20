@@ -2,11 +2,13 @@ TARGET = mkcsb
 CXX = clang++
 CC = clang
 
-LDLIB_DIR = -Icocos2d-x/cocos \
+LDLIB_DIR = -Icocos2d-x \
+            -Icocos2d-x/cocos \
 						-Icocos2d-x/cocos/2d \
 						-Icocos2d-x/cocos/editor-support \
 						-Icocos2d-x/external/glfw3/include/mac \
 						-Icocos2d-x/extensions \
+            -Icocos2d-x/extensions \
 						-Icocos2d-x/external \
             -Icocos2d-x/external/xxhash \
 						-Icocos2d-x/external/tinyxml2 \
@@ -22,6 +24,7 @@ LDLIB_DIR = -Icocos2d-x/cocos \
             -Icocos2d-x/external/jpeg/include/mac \
             -Icocos2d-x/external/webp/include/mac \
             -Icocos2d-x/external/chipmunk/include/chipmunk \
+            -Icocos2d-x/external/poly2tri \
 						-Icocos2d-x/cocos/scripting/lua-bindings/manual/ \
 						-Icocos2d-x/cocos/audio/include \
 						-Icocos2d-x/cocos/audio/mac
@@ -32,7 +35,8 @@ MACROS =  -DUSE_FILE32API \
           -D__APPLE__ \
           -DCC_TARGET_OS_MAC \
           -DPLATFORM_FOLDER=mac \
-          -DCOCOS2D_DEBUG=1
+          -DCOCOS2D_DEBUG=1 \
+          -DCC_USE_3D_PHYSICS=0
 
 DYLIBS = /usr/lib/libz.dylib \
          /usr/lib/libobjc.dylib \
@@ -64,6 +68,7 @@ SRC_DIR =	cocos2d-x/external/Box2D \
 					cocos2d-x/external/xxhash \
 					cocos2d-x/external/xxtea \
           cocos2d-x/external/lua/tolua \
+          cocos2d-x/external/poly2tri \
           cocos2d-x/cocos/editor-support/spine \
           cocos2d-x/cocos/editor-support/cocostudio \
           cocos2d-x/cocos/base \
@@ -75,7 +80,9 @@ SRC_DIR =	cocos2d-x/external/Box2D \
           cocos2d-x/cocos/platform/mac \
           cocos2d-x/cocos/ui \
           cocos2d-x/cocos/renderer \
-          cocos2d-x/cocos/audio/mac
+          cocos2d-x/cocos/audio/mac \
+          cocos2d-x/extensions/Particle3D
+
 
 OBJC_SRC_DIR = cocos2d-x/cocos/audio/mac \
                cocos2d-x/cocos/platform/apple \
@@ -92,7 +99,7 @@ CPPSRCS = $(TARGET).cpp \
         $(shell find $(SRC_DIR) -name '*.cpp' | grep -v android | grep -v flatc.cpp) \
         $(shell find $(SINGLE_DEPTH_DIR) -name '*.cpp' -maxdepth 1)
 
-CSRCS = $(shell find $(SRC_DIR) -name '*.c' | grep -v android) 
+CSRCS = $(shell find $(SRC_DIR) -name '*.c' -or -name '*.cc' | grep -v android) 
 OBJCXXSRCS = $(shell find $(OBJC_SRC_DIR) -name "*.mm" | grep -v android)
 OBJCSRCS = $(shell find $(OBJC_SRC_DIR) -name "*.m" | grep -v android)
 
@@ -100,6 +107,9 @@ OBJS = $(CPPSRCS:.cpp=.o) $(CSRCS:.c=.o) $(OBJCXXSRCS:.mm=.o) $(OBJCSRCS:.m=.o)
 
 %.o: %.c
 	$(CC) $(MACROS) $(LDLIB_DIR) -o $@ -c $<
+
+%.o: %.cc
+	$(CXX) $(MACROS) $(LDLIB_DIR) $(CXXFLAGS) -o $@ -c $<
 
 %.o: %.cpp
 	$(CXX) $(MACROS) $(LDLIB_DIR) $(CXXFLAGS) -o $@ -c $<
