@@ -12,6 +12,7 @@ LDLIB_DIR = -Icocos2d-x \
 						-Icocos2d-x/external \
             -Icocos2d-x/external/xxhash \
 						-Icocos2d-x/external/tinyxml2 \
+            -Icocos2d-x/external/lua/luajit/src/src \
 						-Icocos2d-x/cocos/platform \
 						-Icocos2d-x/external/freetype2/include/mac \
 						-Icocos2d-x/external/edtaa3func \
@@ -25,6 +26,7 @@ LDLIB_DIR = -Icocos2d-x \
             -Icocos2d-x/external/webp/include/mac \
             -Icocos2d-x/external/chipmunk/include/chipmunk \
             -Icocos2d-x/external/poly2tri \
+            -Icocos2d-x/external/bullet \
 						-Icocos2d-x/cocos/scripting/lua-bindings/manual/ \
 						-Icocos2d-x/cocos/audio/include \
 						-Icocos2d-x/cocos/audio/mac
@@ -36,17 +38,18 @@ MACROS =  -DUSE_FILE32API \
           -DCC_TARGET_OS_MAC \
           -DPLATFORM_FOLDER=mac \
           -DCOCOS2D_DEBUG=1 \
-          -DCC_USE_3D_PHYSICS=0
+          -DCC_USE_3D_PHYSICS=0 \
+          -DBUILD_DEMOS=off
 
 DYLIBS = /usr/lib/libz.dylib \
          /usr/lib/libobjc.dylib \
          /usr/lib/libc++abi.dylib \
          $(shell find cocos2d-x/external -name "*.a" | grep mac)
 
-LDFLAGS = -framework OpenGL -framework CoreData -framework AudioToolbox -framework AVFoundation -framework Foundation -framework Cocoa -framework GLKit -framework OpenAL
+LDFLAGS = -framework OpenGL -framework CoreData -framework AudioToolbox -framework AVFoundation -framework Foundation -framework Cocoa -framework GLKit -framework OpenAL -framework OpenCL
 
 OBJDIR   = ./obj
-SRC_DIR =	cocos2d-x/external/Box2D \
+SRC_DIR = cocos2d-x/external/Box2D \
 					cocos2d-x/external/chipmunk \
 					cocos2d-x/external/ConvertUTF \
 					cocos2d-x/external/curl \
@@ -69,6 +72,9 @@ SRC_DIR =	cocos2d-x/external/Box2D \
 					cocos2d-x/external/xxtea \
           cocos2d-x/external/lua/tolua \
           cocos2d-x/external/poly2tri \
+          cocos2d-x/external/clipper \
+          cocos2d-x/external/bullet \
+          cocos2d-x/external/recast \
           cocos2d-x/cocos/editor-support/spine \
           cocos2d-x/cocos/editor-support/cocostudio \
           cocos2d-x/cocos/base \
@@ -79,6 +85,7 @@ SRC_DIR =	cocos2d-x/external/Box2D \
           cocos2d-x/cocos/physics \
           cocos2d-x/cocos/platform/mac \
           cocos2d-x/cocos/ui \
+          cocos2d-x/cocos/navmesh \
           cocos2d-x/cocos/renderer \
           cocos2d-x/cocos/audio/mac \
           cocos2d-x/extensions/Particle3D
@@ -96,14 +103,16 @@ SINGLE_DEPTH_DIR = cocos2d-x/cocos \
                    cocos2d-x/cocos/platform
 
 CPPSRCS = $(TARGET).cpp \
-        $(shell find $(SRC_DIR) -name '*.cpp' | grep -v android | grep -v flatc.cpp) \
+        $(shell find $(SRC_DIR) -name '*.cpp' | grep -v android | grep -v flatc.cpp| grep -v DX11 | grep -v CMake) \
         $(shell find $(SINGLE_DEPTH_DIR) -name '*.cpp' -maxdepth 1)
 
-CSRCS = $(shell find $(SRC_DIR) -name '*.c' -or -name '*.cc' | grep -v android) 
+CCSRCS = $(shell find $(SRC_DIR) -name '*.cc' | grep -v android | grep -v flatc.cpp| grep -v DX11| grep -v CMake) \
+
+CSRCS = $(shell find $(SRC_DIR) -name '*.c' | grep -v android | grep -v CMake) 
 OBJCXXSRCS = $(shell find $(OBJC_SRC_DIR) -name "*.mm" | grep -v android)
 OBJCSRCS = $(shell find $(OBJC_SRC_DIR) -name "*.m" | grep -v android)
 
-OBJS = $(CPPSRCS:.cpp=.o) $(CSRCS:.c=.o) $(OBJCXXSRCS:.mm=.o) $(OBJCSRCS:.m=.o)
+OBJS = $(CPPSRCS:.cpp=.o) $(CCSRCS:.cc=.o) $(CSRCS:.c=.o) $(OBJCXXSRCS:.mm=.o) $(OBJCSRCS:.m=.o)
 
 %.o: %.c
 	$(CC) $(MACROS) $(LDLIB_DIR) -o $@ -c $<
